@@ -22,10 +22,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         updateDisplay()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     @IBAction func onStart(_ sender: UIButton)
     {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.timeout), userInfo: nil, repeats: true)
@@ -35,9 +31,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
 
     @IBAction func onStop(_ sender: UIButton)
     {
+	    // 1st stop: reset seconds to min:sec
         if timer.isValid {
             resetSeconds()
         }
+        // 2nd stop: reset min:sec to 0:0
         else {
             seconds = 0
             pickerView.selectRow(0, inComponent: 0, animated: true)
@@ -49,7 +47,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         btStart.isEnabled = true
         pickerView.isHidden = false
     }
-    
+
+	// One second is passed
     func timeout()
     {
         seconds -= 1
@@ -68,7 +67,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func numberOfComponents(in _: UIPickerView) -> Int {
         return 4
     }
-    
+
+	// Number of rows for a given picker column
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch component {
         case 0:
@@ -87,7 +87,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func pickerView(_: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerData(forComponent: component, forRow: row)
     }
-    
+
+	// Data for given picker column and row
     func pickerData(forComponent component: Int, forRow row: Int) -> String {
         switch component {
         case 0:
@@ -102,14 +103,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             return ""
         }
     }
-    
+
+	// Convert seconds to min:sec and display it
     func updateDisplay()
     {
         let minute = seconds / 60
         let second = seconds - minute * 60
         labelDisplay.text = String(format: "%02d:%02d", minute, second)
     }
-    
+
+	// Read settings and reset seconds
     func resetSeconds()
     {
         let minute = pickerView.selectedRow(inComponent: 0)
@@ -124,6 +127,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         updateDisplay()
     }
 
+	// Pickerview width
     func pickerView(_: UIPickerView, widthForComponent component: Int) -> CGFloat {
         // labels
         if component == 1 || component == 3 {
